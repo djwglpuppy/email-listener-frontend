@@ -5,7 +5,7 @@ async = require("async")
 
 
 module.exports = msgdb = 
-    getMsgs: (start = 0, end = 20, onComplete) ->
+    getMsgs: (start = 0, end = 20, onComplete = ->) ->
         msgData = []
         client.LRANGE "msgs", start, end, (e, msgs) ->
             async.forEachSeries(msgs, ((mkey, cb) ->
@@ -18,7 +18,7 @@ module.exports = msgdb =
                     cb()
             ), -> onComplete(msgData))
 
-    addMsg: (data, onComplete) ->
+    addMsg: (data, onComplete = ->) ->
         client.hset data.key, "subject", data.subject
         client.hset data.key, "from", data.from
         client.hset data.key, "date", data.date
