@@ -1,0 +1,59 @@
+devport = 9100
+express = require("express")
+RedisStore = require('connect-redis')(express)
+redisdb = require("./redis")
+emaillistener = require("email-listener")
+
+app = express.createServer(
+    express.bodyParser(),
+    express.cookieParser(),
+    express.session({secret: "thisisnotthesecretyouarelookingfor",  store: new RedisStore})
+)
+
+app.configure ->
+    @set('views', __dirname + '/views')
+    @set('view engine', 'jade')
+
+app.configure "development", ->
+
+    @use(require("coffee-middle")({
+        src: __dirname + "/precompiled/js"
+        dest: __dirname + "/static/js"
+        browserReload: false
+    }))
+
+    @use(require("stylus").middleware({
+        src: __dirname + "/precompiled"
+        dest: __dirname + "/static"
+        compress: true
+    }))
+
+    @use(express.static(__dirname + '/static'))
+    @use(this.router)
+        
+
+require("./routes")(app)
+
+if app.settings.env is "development"
+    app.listen(devport)
+    console.log "Started on port #{devport} in Development Mode"
+else
+    app.listen(80)
+    console.log "Started on port 80 in Production Mode"
+
+
+###
+# Email Listener
+###
+
+emaillistener.start()
+
+emaillistener.on "msg", (recipient, body) ->
+    newmsg = @parseBody(body)
+    redisdb.addMsg {
+        key: newmsg.messageID
+        subject: newmsg.subject
+        from: newmsg.from
+        date: newmsg.date
+        msg: if newmsg.body.html isnt "" then newmsg.body.html else newmsg.body.plain
+    }

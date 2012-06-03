@@ -1,0 +1,17 @@
+{
+    "name": "email-listener-frontend",
+    "version": "0.0.1",
+    "private": true, 
+    "dependencies": {
+        "express": ">=0.0.1",
+        "jade": ">=0.0.1",
+        "stylus": ">=0.0.1",
+        "coffee-middle": ">=0.0.1",
+        "underscore": ">=0.0.1",
+        "connect-redis": ">= 0.0.1",
+        "async": ">=0.0.1",
+        "redis":">= 0.7.1",
+        "hiredis":">= 0.1.14",
+        "email-listener": ">= 0.0.1"
+    }
+}
