@@ -23,5 +23,5 @@ module.exports = msgdb =
         client.hset data.key, "from", data.from
         client.hset data.key, "date", data.date
         client.hset data.key, "msg", data.msg
-        client.expire data.key, 180
+        client.expire data.key, 7200
         client.lpush "msgs", data.key, (e, r) -> onComplete(true)
