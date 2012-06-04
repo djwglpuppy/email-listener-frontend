@@ -1,11 +1,16 @@
 html{margin:0;padding:0;width:100%;height:100%}
-body{margin:0;padding:0;font-family:"Helvetica","Arial",sans-serif;background-color:#3c2f25;color:#fff}
+body{margin:0;padding:0;font-family:"Helvetica","Arial",sans-serif;background:url("/css/images/back.jpg");color:#fff}
 #content{width:650px;margin:0 auto 40px;padding:0 0 40px;}
-#content #title{font-weight:bold;font-size:42px;text-align:center;margin-top:30px;color:#eebb93}
+#content #title{margin:30px auto 10px;width:387px;height:37px;background:url("/css/images/title.png") no-repeat left top}
 #content #subtitle{font-size:22px;text-align:center;}
 #content #subtitle b{color:#4397a2}
 #content #subtitle2{font-size:14px;color:#a27f64;text-align:center;margin:5px 0 20px 0}
-#content .message{background:url("/css/images/texture2.jpg");width:100%;min-height:200px;margin:10px 0;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;border:8px solid #1a1a1a;padding:10px 20px;}
-#content .message .subject{text-shadow:-1px -1px #222;color:#fff;margin:10px 0;font-size:28px;font-weight:bold}
-#content .message .subinfo{font-size:16px;color:#000}
-#content .message .body{font-size:15px;margin:10px 0;line-height:20px;color:#fff}
+#content .item{background:url("/css/images/texture2.jpg");width:100%;min-height:200px;margin:10px 0;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;border:1px solid #000;padding:10px 20px;position:relative;}
+#content .item .subject{color:#fff;margin:10px 0;font-size:24px;font-weight:bold}
+#content .item .subinfo{font-size:16px;color:#000}
+#content .item .body{font-size:15px;margin:10px 0;line-height:20px;padding-bottom:25px;color:#fff;}
+#content .item .body a:link,#content .item .body a:visited{color:#1a1a1a}
+#content .item .link{position:absolute;right:5px;bottom:5px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;background-color:rgba(0,0,0,0.5);font-size:12px;padding:5px;cursor:pointer;}
+#content .item .link:hover{background-color:rgba(0,0,0,0.8)}
+#content .raw{display:none;}
+#content .raw .body{font-size:12px}

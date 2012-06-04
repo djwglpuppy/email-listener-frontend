@@ -30,30 +30,40 @@ app.configure "development", ->
 
     @use(express.static(__dirname + '/static'))
     @use(this.router)
-        
+
+app.configure "production", ->
+    @use(express.static(__dirname + '/static'))
+    @use(this.router)
+    
 
 require("./routes")(app)
 
 if app.settings.env is "development"
     app.listen(devport)
     console.log "Started on port #{devport} in Development Mode"
+    emaillistener.start(8888)
 else
-    app.listen(80)
-    console.log "Started on port 80 in Production Mode"
+    app.listen(8000)
+    console.log "Started on port 8000 in Production Mode"
+    emaillistener.start()
 
 
 ###
 # Email Listener
 ###
 
-emaillistener.start()
+
 
 emaillistener.on "msg", (recipient, body) ->
-    newmsg = @parseBody(body)
+    return false if recipient isnt "tester@nodejs.io"
+    newBody = body.replace(/@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+/gi, '@___.site')
+    newmsg = @parseBody(newBody)
+
     redisdb.addMsg {
         key: newmsg.messageID
         subject: newmsg.subject
         from: newmsg.from
         date: newmsg.date
+        raw: newBody
         msg: if newmsg.body.html isnt "" then newmsg.body.html else newmsg.body.plain
     }

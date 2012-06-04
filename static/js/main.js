@@ -12,12 +12,35 @@ MessageView = (function(_super) {
 
   MessageView.prototype.tagName = "div";
 
-  MessageView.prototype.initialize = function(model) {
-    this.model = model;
+  MessageView.prototype.events = {
+    "click .message .link": "viewRaw",
+    "click .raw .link": "viewMessage"
   };
 
   MessageView.prototype.render = function() {
     return this.$el.html(main.templates.msg(this.model.toJSON()));
+  };
+
+  MessageView.prototype.viewRaw = function() {
+    var viewer,
+      _this = this;
+    viewer = function() {
+      _this.$el.find(".message").hide();
+      return _this.$el.find(".raw").fadeIn(300);
+    };
+    if (!(this.model.get("raw") != null)) {
+      return this.model.rawData(function(raw) {
+        _this.$el.find(".raw .body pre").text("" + raw);
+        return viewer();
+      });
+    } else {
+      return viewer();
+    }
+  };
+
+  MessageView.prototype.viewMessage = function() {
+    this.$el.find(".raw").hide();
+    return this.$el.find(".message").fadeIn(300);
   };
 
   return MessageView;
@@ -32,8 +55,52 @@ Msg = (function(_super) {
     return Msg.__super__.constructor.apply(this, arguments);
   }
 
+  Msg.prototype.emailConvert = function() {
+    var email, from;
+    from = this.get("from").match(/\<(.*)\>/);
+    email = from != null ? from[1] : this.get("from");
+    return this.set("from", email);
+  };
+
+  Msg.prototype.dateConvert = function() {
+    var d, hours, mer, newDate, newTime;
+    d = new Date(this.get("date"));
+    newDate = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("-");
+    hours = d.getHours();
+    mer = "am";
+    if (hours === 0) {
+      newTime = 12;
+    }
+    if (hours < 12 && hours !== 0) {
+      newTime = hours;
+    }
+    if (hours > 12) {
+      newTime = hours - 12;
+    }
+    if (hours >= 12) {
+      mer === "pm";
+    }
+    newTime += ":" + d.getMinutes() + mer;
+    return this.set("date", newDate + " " + newTime);
+  };
+
+  Msg.prototype.initialize = function() {
+    this.emailConvert();
+    return this.dateConvert();
+  };
+
   Msg.prototype.render = function() {
-    return new MessageView(this).render();
+    return new MessageView({
+      model: this
+    }).render();
+  };
+
+  Msg.prototype.rawData = function(onComplete) {
+    var _this = this;
+    return $.get("/rawdata/" + this.id, function(rawdata) {
+      _this.set("raw", rawdata);
+      return onComplete(_this.get("raw"));
+    });
   };
 
   return Msg;

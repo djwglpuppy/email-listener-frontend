@@ -11,6 +11,7 @@ module.exports = msgdb =
             async.forEachSeries(msgs, ((mkey, cb) ->
                 client.hgetall mkey, (e, msg) ->
                     if msg?
+                        msg.id = mkey
                         msgData.push(msg)
                     else
                         client.LREM "msgs", 0, mkey
@@ -23,5 +24,11 @@ module.exports = msgdb =
         client.hset data.key, "from", data.from
         client.hset data.key, "date", data.date
         client.hset data.key, "msg", data.msg
-        client.expire data.key, 7200
+        client.expire data.key, 3600
         client.lpush "msgs", data.key, (e, r) -> onComplete(true)
+
+        client.set data.key + "_raw", data.raw
+        client.expire data.key + "_raw", 3600
+
+    getRaw: (msg_id, onComplete = ->) ->
+        client.get msg_id + "_raw", (e, raw) -> onComplete(raw)

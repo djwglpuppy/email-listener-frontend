@@ -3,14 +3,20 @@ a(href="https://github.com/djwglpuppy/node-email-listener") <img style="position
 
 
 #content
-	#title node-email-listener
+	#title
 	#subtitle messages sent to <b>tester@nodejs.io</b> are displayed here
-	#subtitle2 you are encouraged to send a message, it will be deleted after 2 hours sent 
+	#subtitle2 you are encouraged to send a message, but they will be deleted after 1 hour sent <br /><i>(your email address will be masked when it is displayed)</i>
 	#messages
 
 
 script#msg-tpl(type="text/x-handlebars-template")
-	.message
+	.item.message
 		.subject {{subject}}
-		.subinfo <b>{{from}}</b> at <b>{{date}}</b>
+		.subinfo <b>{{from}}</b> sent a message at <b>{{date}}</b>
 		.body {{{msg}}}
+		.link view raw email body
+	.item.raw
+		.subject {{subject}}
+		.body
+			pre
+		.link view regular email
