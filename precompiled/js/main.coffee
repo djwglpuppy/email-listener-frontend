@@ -38,7 +38,7 @@ class Msg extends Backbone.Model
         newTime = 12 if hours is 0
         newTime = hours if hours < 12 and hours isnt 0
         newTime = hours - 12 if hours > 12
-        mer is "pm" if hours >= 12
+        mer = "pm" if hours >= 12
         newTime += (":" + d.getMinutes() + mer)
         @set("date", newDate + " " + newTime)
 

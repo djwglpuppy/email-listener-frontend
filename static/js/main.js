@@ -78,7 +78,7 @@ Msg = (function(_super) {
       newTime = hours - 12;
     }
     if (hours >= 12) {
-      mer === "pm";
+      mer = "pm";
     }
     newTime += ":" + d.getMinutes() + mer;
     return this.set("date", newDate + " " + newTime);
