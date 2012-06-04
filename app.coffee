@@ -52,18 +52,20 @@ else
 # Email Listener
 ###
 
+emaillistener.on "msg", (recipient, body, parsed) ->
 
-
-emaillistener.on "msg", (recipient, body) ->
     return false if recipient isnt "tester@nodejs.io"
     newBody = body.replace(/@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+/gi, '@___.site')
-    newmsg = @parseBody(newBody)
+
+    now = new Date()
 
     redisdb.addMsg {
-        key: newmsg.messageID
-        subject: newmsg.subject
-        from: newmsg.from
-        date: newmsg.date
+        key: now.getTime()
+        subject: parsed.subject
+        from: parsed.from[0].name
+        date: now
         raw: newBody
-        msg: if newmsg.body.html isnt "" then newmsg.body.html else newmsg.body.plain
+        msg: if parsed.html isnt "" then parsed.html.replace(/@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+/gi, '@___.site') else parsed.text.replace(/@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+/gi, '@___.site')
     }
+
+
