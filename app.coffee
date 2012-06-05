@@ -65,7 +65,7 @@ emaillistener.on "msg", (recipient, body, parsed) ->
         from: parsed.from[0].name
         date: now
         raw: newBody
-        msg: if parsed.html isnt "" then parsed.html.replace(/@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+/gi, '@___.site') else parsed.text.replace(/@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+/gi, '@___.site')
+        msg: if parsed.html? then parsed.html.replace(/@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+/gi, '@___.site') else parsed.text.replace(/@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+/gi, '@___.site')
     }
 
 
